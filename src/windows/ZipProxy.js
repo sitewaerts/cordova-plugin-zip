@@ -48,12 +48,12 @@ function unzip(filename, outputDir) {
 }
 
 cordova.commandProxy.add("Zip",{
-    unzip:function(successCallback,errorCallback, filename, outputDir) {
-        if(!filename || !filename.length) {
+    unzip:function(successCallback,errorCallback, args) {
+        if(!args || !args.length) {
             errorCallback("Error, something was wrong with the input filename. =>" + filename);
         }
         else {
-            unzip(filename, outputDir).done(successCallback());
+            unzip(args[0], args[1]).done(successCallback());
 
         }
     }
