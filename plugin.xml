@@ -71,7 +71,7 @@
     </platform>
 
     <platform name="windows">
-        <js-module src="src/windows/Zip.js" name="Zip">
+        <js-module src="src/windows/ZipProxy.js" name="ZipProxy">
             <merges target=""/>
         </js-module>
     </platform>

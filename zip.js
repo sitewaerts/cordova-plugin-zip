@@ -23,5 +23,7 @@ exports.unzip = function(fileName, outputDirectory, callback, progressCallback) 
             callback(-1);
         }
     };
-    exec(win, fail, 'Zip', 'unzip', [fileName, outputDirectory]);
+    cordova.exec(win, fail, "Zip", "unzip", [fileName, outputDirectory]);
+
+    //exec(win, fail, 'Zip', 'unzip', [fileName, outputDirectory]);
 };
