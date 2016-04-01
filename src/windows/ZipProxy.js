@@ -1,4 +1,4 @@
-var JSZip = require("JsZip");
+var JSZip = require("./JsZip");
 
 function getFileAsUint8Array(file) {
     return storage.FileIO.readBufferAsync(file)
