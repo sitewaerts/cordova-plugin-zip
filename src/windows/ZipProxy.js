@@ -1,4 +1,4 @@
-var JSZip = require("jszip");
+var JSZip = require("./jszip.min");
 
 function getFileAsUint8Array(file) {
     return storage.FileIO.readBufferAsync(file)

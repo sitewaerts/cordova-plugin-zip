@@ -74,6 +74,9 @@
         <js-module src="src/windows/ZipProxy.js" name="ZipProxy">
             <merges target=""/>
         </js-module>
+        <js-module src="src/windows/jszip.min.js" name="JsZip">
+            <merges target=""/>
+        </js-module>
     </platform>
 
 </plugin>
