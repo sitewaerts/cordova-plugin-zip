@@ -46,8 +46,8 @@ function unzip(filename, outputDir) {
         });
 }
 
-cordova.commandProxy.add("Echo",{
-    echo:function(successCallback,errorCallback, filename, outputDir) {
+cordova.commandProxy.add("Zip",{
+    unzip:function(successCallback,errorCallback, filename, outputDir) {
         if(!filename || !filename.length) {
             errorCallback("Error, something was wrong with the input filename. =>" + filename);
         }
@@ -57,6 +57,3 @@ cordova.commandProxy.add("Echo",{
         }
     }
 });
-
-cordova.commandProxy.add("Zip", {
-    unzip: require("cordova/exec/proxy").add("Zip", module.exports);
