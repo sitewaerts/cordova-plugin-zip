@@ -1,5 +1,8 @@
 var JSZip = require("./JsZip");
 
+var storage = Windows.Storage; // Alias for readability
+
+
 function getFileAsUint8Array(file) {
     return storage.FileIO.readBufferAsync(file)
         .then(function (buffer) {
@@ -14,9 +17,7 @@ function getFileAsUint8Array(file) {
 }
 
 function unzip(filename, outputDir) {
-    var fileCollisionOption = replaceIfExists ?
-        storage.CreationCollisionOption.replaceExisting :
-        storage.CreationCollisionOption.failIfExists;
+    var fileCollisionOption = storage.CreationCollisionOption.replaceExisting;
 
     return storage.StorageFile
         .getFileFromPathAsync(filename)
