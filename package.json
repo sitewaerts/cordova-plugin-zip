@@ -6,7 +6,8 @@
     "id": "cordova-plugin-unzip",
     "platforms": [
       "android",
-      "ios"
+      "ios",
+      "windows"
     ]
   },
   "repository": {
