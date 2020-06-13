@@ -111,12 +111,15 @@ cordova.commandProxy.add("Zip", {
     {
         if (!args || !args.length)
         {
-            errorCallback("Error, something was wrong with the input filename. =>" + filename);
+            var message = "Error, something was wrong with the input filename. =>" + filename;
+            if(errorCallback)
+                errorCallback(message);
+            else
+                console.error(message);
         }
         else
         {
-            unzip(args[0], args[1]).done(successCallback());
-
+            unzip(args[0], args[1]).then(successCallback, errorCallback || console.error.bind(console));
         }
     }
 });
