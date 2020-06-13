@@ -90,9 +90,10 @@ function unzip(filename, outputDir)
                     //Extract files
                     return WinJS.Promise.join(Object.values(zip.files).map(function (zippedFile)
                     {
-
+                        if(zippedFile.dir)
+                            return new WinJS.Promise(function(resolve){resolve()});
                         //Create new file
-                        return outFolder.createFileAsync(zippedFile.name, fileCollisionOption)
+                        return outFolder.createFileAsync(zippedFile.name.replace(/\//, '\\'), fileCollisionOption)
                             .then(function (localStorageFile)
                             {
                                 //Copy the zipped file's contents into the local storage file
