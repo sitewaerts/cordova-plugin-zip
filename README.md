@@ -1,6 +1,6 @@
 # cordova-plugin-zip
 
-A Cordova plugin to unzip files in Android and iOS.
+A Cordova plugin to unzip files in Android and iOS and Windows 10.
 
 ## Installation
 
@@ -28,6 +28,9 @@ The values `loaded` and `total` are the number of compressed bytes processed and
 file size of the zip file.
 
 ## Release Notes
+
+### 3.1.1 (Jun 13, 2020)
+* sveveral bugfixes for windows path handling
 
 ### 3.1.0 (Feb 23, 2016)
 * Updated SSZipArchive (ios lib) to 1.1
