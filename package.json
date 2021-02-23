@@ -32,6 +32,9 @@
   },
   "homepage": "https://github.com/MobileChromeApps/zip",
   "devDependencies": {
-    "@types/cordova": "^0.0.34"
+    "@types/cordova": "^0.0.34",
+    "@types/jszip": "^3.4.1",
+    "@types/winjs": "^4.4.0",
+    "jszip": "^3.6.0"
   }
 }

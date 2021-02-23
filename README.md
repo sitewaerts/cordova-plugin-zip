@@ -31,6 +31,7 @@ file size of the zip file.
 
 ### 3.1.2 (Feb 23, 2021)
 * progress callback for windows
+* jszip update
 
 ### 3.1.1 (Jun 13, 2020)
 * several bugfixes for windows path handling

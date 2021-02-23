@@ -72,16 +72,14 @@ function resolveOutDir(outputDir)
 
 }
 
-//TODO: progress callback!
 //TODO: jszip update!
 /**
- *
  * @param {string} filename
  * @param {string} outputDir
  * @param {function(total:number, loaded:number):void} progressCallback
  * @return {PromiseLike<any>}
  */
-function unzip(filename, outputDir, progressCallback)
+function unzipJSZip(filename, outputDir, progressCallback)
 {
     var fileCollisionOption = storage.CreationCollisionOption.replaceExisting;
 
@@ -136,10 +134,10 @@ cordova.commandProxy.add("Zip", {
         else
         {
             function progressCallback(total, loaded){
-                successCallback({loaded: loaded, total: total});
+                successCallback({loaded: loaded, total: total}, { keepCallback: true});
             }
 
-            unzip(args[0], args[1], progressCallback).then(successCallback, errorCallback || console.error.bind(console));
+            unzipJSZip(args[0], args[1], progressCallback).then(successCallback, errorCallback || console.error.bind(console));
         }
     }
 });
