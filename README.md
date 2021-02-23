@@ -29,8 +29,11 @@ file size of the zip file.
 
 ## Release Notes
 
+### 3.1.2 (Feb 23, 2021)
+* progress callback for windows
+
 ### 3.1.1 (Jun 13, 2020)
-* sveveral bugfixes for windows path handling
+* several bugfixes for windows path handling
 
 ### 3.1.0 (Feb 23, 2016)
 * Updated SSZipArchive (ios lib) to 1.1

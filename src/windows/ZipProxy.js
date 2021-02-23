@@ -72,7 +72,16 @@ function resolveOutDir(outputDir)
 
 }
 
-function unzip(filename, outputDir)
+//TODO: progress callback!
+//TODO: jszip update!
+/**
+ *
+ * @param {string} filename
+ * @param {string} outputDir
+ * @param {function(total:number, loaded:number):void} progressCallback
+ * @return {PromiseLike<any>}
+ */
+function unzip(filename, outputDir, progressCallback)
 {
     var fileCollisionOption = storage.CreationCollisionOption.replaceExisting;
 
@@ -86,12 +95,17 @@ function unzip(filename, outputDir)
                 {
                     //Create the zip data in memory
                     var zip = new JSZip(zipFileContents);
-
+                    var files = Object.values(zip.files);
+                    var done = 0;
+                    progressCallback(files.length, done);
+                    function _fileProcessed(){
+                        progressCallback(files.length, ++done);
+                    }
                     //Extract files
-                    return WinJS.Promise.join(Object.values(zip.files).map(function (zippedFile)
+                    return WinJS.Promise.join(files.map(function (zippedFile)
                     {
                         if(zippedFile.dir)
-                            return new WinJS.Promise(function(resolve){resolve()});
+                            return new WinJS.Promise(function(resolve){resolve()}).then(_fileProcessed);
                         //Create new file
                         return outFolder.createFileAsync(zippedFile.name.replace(/\//g, '\\'), fileCollisionOption)
                             .then(function (localStorageFile)
@@ -100,8 +114,10 @@ function unzip(filename, outputDir)
                                 var fileContents = zip.file(zippedFile.name).asUint8Array();
                                 return storage.FileIO
                                     .writeBytesAsync(localStorageFile, fileContents);
-                            });
-                    }));
+                            }).then(_fileProcessed);
+                    })).then(function(){
+                        progressCallback(files.length, files.length);
+                    });
                 });
         });
 }
@@ -119,7 +135,11 @@ cordova.commandProxy.add("Zip", {
         }
         else
         {
-            unzip(args[0], args[1]).then(successCallback, errorCallback || console.error.bind(console));
+            function progressCallback(total, loaded){
+                successCallback({loaded: loaded, total: total});
+            }
+
+            unzip(args[0], args[1], progressCallback).then(successCallback, errorCallback || console.error.bind(console));
         }
     }
 });

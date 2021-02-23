@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-zip",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Unzips zip files",
   "cordova": {
     "id": "cordova-plugin-unzip",
@@ -30,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/MobileChromeApps/zip/issues"
   },
-  "homepage": "https://github.com/MobileChromeApps/zip"
+  "homepage": "https://github.com/MobileChromeApps/zip",
+  "devDependencies": {
+    "@types/cordova": "^0.0.34"
+  }
 }
