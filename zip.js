@@ -18,9 +18,9 @@ exports.unzip = function(fileName, outputDirectory, callback, progressCallback) 
             callback(0);
         }
     };
-    var fail = function(result) {
+    var fail = function(error) {
         if (callback) {
-            callback(-1);
+            callback(error);
         }
     };
     cordova.exec(win, fail, "Zip", "unzip", [fileName, outputDirectory]);

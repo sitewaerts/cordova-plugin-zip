@@ -1,16 +1,16 @@
 var JSZip = require("./JsZip");
 
-var storage = Windows.Storage; // Alias for readability
+var Storage = Windows.Storage; // Alias for readability
 
 
 function getFileAsUint8Array(file)
 {
-    return storage.FileIO.readBufferAsync(file)
+    return Storage.FileIO.readBufferAsync(file)
         .then(function (buffer)
         {
             //Read the file into a byte array
             var fileContents = new Uint8Array(buffer.length);
-            var dataReader = storage.Streams.DataReader.fromBuffer(buffer);
+            var dataReader = Storage.Streams.DataReader.fromBuffer(buffer);
             dataReader.readBytes(fileContents);
             dataReader.close();
 
@@ -51,11 +51,11 @@ function resolveOutDir(outputDir)
                 // if (dir.nativeURL.indexOf(cordova.file.cacheDirectory) === 0)
                 //     targetFolder = storage.ApplicationData.current.localCacheFolder;
                 if (dir.nativeURL.indexOf(cordova.file.tempDirectory) === 0)
-                    targetFolder = storage.ApplicationData.current.temporaryFolder;
+                    targetFolder = Storage.ApplicationData.current.temporaryFolder;
                 else if (dir.nativeURL.indexOf(cordova.file.syncedDataDirectory) === 0)
-                    targetFolder = storage.ApplicationData.current.roamingFolder;
+                    targetFolder = Storage.ApplicationData.current.roamingFolder;
                 else if (dir.nativeURL.indexOf(cordova.file.dataDirectory) === 0)
-                    targetFolder = storage.ApplicationData.current.localFolder;
+                    targetFolder = Storage.ApplicationData.current.localFolder;
                 else
                 {
                     _error("cannot map native url to file system: " + dir.nativeURL);
@@ -81,9 +81,9 @@ function resolveOutDir(outputDir)
  */
 function unzipJSZip(filename, outputDir, progressCallback)
 {
-    var fileCollisionOption = storage.CreationCollisionOption.replaceExisting;
+    var fileCollisionOption = Storage.CreationCollisionOption.replaceExisting;
 
-    return storage.StorageFile
+    return Storage.StorageFile
         .getFileFromApplicationUriAsync(new Windows.Foundation.Uri(filename))
         .then(getFileAsUint8Array)
         .then(function (zipFileContents)
@@ -91,31 +91,48 @@ function unzipJSZip(filename, outputDir, progressCallback)
             return resolveOutDir(outputDir)
                 .then(function (outFolder)
                 {
-                    //Create the zip data in memory
-                    var zip = new JSZip(zipFileContents);
-                    var files = Object.values(zip.files);
-                    var done = 0;
-                    progressCallback(files.length, done);
-                    function _fileProcessed(){
-                        progressCallback(files.length, ++done);
-                    }
-                    //Extract files
-                    return WinJS.Promise.join(files.map(function (zippedFile)
+                    try
                     {
-                        if(zippedFile.dir)
-                            return new WinJS.Promise(function(resolve){resolve()}).then(_fileProcessed);
-                        //Create new file
-                        return outFolder.createFileAsync(zippedFile.name.replace(/\//g, '\\'), fileCollisionOption)
-                            .then(function (localStorageFile)
+                        //Create the zip data in memory
+                        return new JSZip().loadAsync(zipFileContents).then(function(zip){
+                            var files = Object.values(zip.files);
+                            var done = 0;
+                            progressCallback(files.length, done);
+
+                            function _fileProcessed()
                             {
-                                //Copy the zipped file's contents into the local storage file
-                                var fileContents = zip.file(zippedFile.name).asUint8Array();
-                                return storage.FileIO
-                                    .writeBytesAsync(localStorageFile, fileContents);
-                            }).then(_fileProcessed);
-                    })).then(function(){
-                        progressCallback(files.length, files.length);
-                    });
+                                progressCallback(files.length, ++done);
+                            }
+
+                            //Extract files
+                            return WinJS.Promise.join(files.map(function (zippedFile)
+                                {
+                                    if (zippedFile.dir)
+                                        return new WinJS.Promise(function (resolve)
+                                        {
+                                            resolve()
+                                        }).then(_fileProcessed);
+                                    //Create new file
+                                    return outFolder.createFileAsync(zippedFile.name.replace(/\//g, '\\'), fileCollisionOption)
+                                        .then(function (localStorageFile)
+                                        {
+                                            //Copy the zipped file's contents into the local storage file
+                                            return zip.file(zippedFile.name).async("array")
+                                                .then(function(fileContents){
+                                                    return Storage.FileIO.writeBytesAsync(localStorageFile, fileContents);
+                                                });
+                                        }).then(_fileProcessed);
+                                }
+                            )).then(function ()
+                            {
+                                progressCallback(files.length, files.length);
+                            });
+                        });
+                    }
+                    catch(error){
+                        console.error("cannot unzip", error);
+                        return WinJS.Promise.wrapError(error);
+                    }
                 });
         });
 }
