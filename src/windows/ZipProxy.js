@@ -72,7 +72,8 @@ function resolveOutDir(outputDir)
 
 }
 
-//TODO: jszip update!
+//TODO: check if zip-js is faster and uses less memory for large zips
+
 /**
  * @param {string} filename
  * @param {string} outputDir
