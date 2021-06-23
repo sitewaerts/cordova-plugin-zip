@@ -22,7 +22,6 @@ function resolveOutDir(outputDir)
 {
     return new WinJS.Promise(function (resolve, reject)
     {
-
         function _error(error)
         {
             error = {
@@ -63,13 +62,11 @@ function resolveOutDir(outputDir)
                 }
 
                 targetFolder.getFolderAsync(dir.fullPath.substring(1).replace(/\//g, '\\')).then(_success, _error);
+				//targetFolder.getFolderAsync(dir.fullPath).then(_success, _error);
             },
             _error
         );
-
     });
-
-
 }
 
 //TODO: check if zip-js is faster and uses less memory for large zips
@@ -138,24 +135,89 @@ function unzipJSZip(filename, outputDir, progressCallback)
         });
 }
 
+function unzipUWP(zipFileIn, outDirIn, zipAlgorithm, progressCallback)
+{
+    console.log('ZipProxy.Zip.unzip.unzipUWP()');
+    console.log('- zipFileIn = ' + zipFileIn);
+    console.log('- outDirIn = ' + outDirIn);
+    console.log('- zipAlgorithm = ' + zipAlgorithm);
+
+    return Storage.StorageFile
+        .getFileFromApplicationUriAsync(new Windows.Foundation.Uri(zipFileIn))
+        .then(function(zipFileNative)
+        {
+            console.log('- zipFileNative.path = ' + zipFileNative.path);
+
+            return resolveOutDir(outDirIn)
+				.then(function(outDirNative)
+				{
+                    console.log('- outDirNative.path = ' + outDirNative.path);
+
+					try
+                    {
+                        var zipUWP = new ZipComponentUWP.ZipComponent(zipAlgorithm, zipFileNative.path, outDirNative.path);
+						var zipFileIndex = 0;
+						var zipFileCount = zipUWP.getEntryCount();
+						
+						progressCallback(zipFileCount, 0);
+
+						function _fileProcessed()
+						{
+							progressCallback(zipFileCount, ++zipFileIndex);
+						}
+						
+						var zipJobs = [];
+						for(let i = 0; i < zipFileCount; ++i)
+							zipJobs[i] = { index: i, name: zipUWP.getEntryName(i) };
+						
+						return WinJS.Promise.join(zipJobs.map(function(zipJob)
+							{
+								return new WinJS.Promise(function(resolve)
+									{
+										console.log('zipUWP.unzipEntry() => ' + zipJob.name);
+										zipUWP.unzipEntry(zipJob.index);
+										resolve();
+									}).then(_fileProcessed);
+							}
+						)).then(function ()
+						{
+							progressCallback(zipJobs.length, zipJobs.length);
+						});
+					}
+					catch(error)
+					{
+						console.error("cannot unzip", error);
+						return WinJS.Promise.wrapError(error);
+					}
+				});
+        });
+}
+
 cordova.commandProxy.add("Zip", {
     unzip: function (successCallback, errorCallback, args)
     {
         if (!args || !args.length)
         {
-            var message = "Error, something was wrong with the input filename. =>" + filename;
+            var message = "Error, something was wrong with the input filename. => " + filename;
             if(errorCallback)
                 errorCallback(message);
             else
                 console.error(message);
         }
-        else
+		else
         {
             function progressCallback(total, loaded){
                 successCallback({loaded: loaded, total: total}, { keepCallback: true});
             }
 
-            unzipJSZip(args[0], args[1], progressCallback).then(successCallback, errorCallback || console.error.bind(console));
+            if (args.length == 3 && args[2]) {
+                unzipUWP(args[0], args[1], args[2], progressCallback)
+                    .then(successCallback, errorCallback || console.error.bind(console));
+            }
+            else {
+                unzipJSZip(args[0], args[1], progressCallback)
+                    .then(successCallback, errorCallback || console.error.bind(console));
+            }
         }
     }
 });

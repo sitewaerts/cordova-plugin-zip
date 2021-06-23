@@ -77,6 +77,52 @@
         <js-module src="src/windows/jszip.min.js" name="JsZip">
             <merges target=""/>
         </js-module>
+        <framework
+			src="src/windows/ZipComponentUWP/Bin/ZipComponentUWP_x86_Release/ZipComponentUWP.winmd"
+			implementation="src/windows/ZipComponentUWP/Bin/ZipComponentUWP_x86_Release/ZipComponentUWP.dll"
+			device-target="all"
+			target-dir="x86"
+			arch="x86"
+			custom="true"
+			embed="true" />
+		<framework
+			src="src/windows/ZipComponentUWP/Bin/ZipComponentUWP_x64_Release/ZipComponentUWP.winmd"
+			implementation="src/windows/ZipComponentUWP/Bin/ZipComponentUWP_x64_Release/ZipComponentUWP.dll"
+			device-target="all"
+			target-dir="x64"
+			arch="x64"
+			custom="true"
+			embed="true" />
+		<framework
+			src="src/windows/ZipComponentUWP/Bin/ZipComponentUWP_ARM_Release/ZipComponentUWP.winmd"
+			implementation="src/windows/ZipComponentUWP/Bin/ZipComponentUWP_ARM_Release/ZipComponentUWP.dll"
+			device-target="all"
+			target-dir="ARM"
+			arch="ARM"
+			custom="true"
+			embed="true" />
+		<!-- The following empty component is required to force Cordova to properly load our UWP components -->
+		<framework
+			src="src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/EmptyDotNetComponentUWP_x86_Release/EmptyDotNetComponentUWP.winmd"
+			device-target="all"
+			target-dir="x86"
+			arch="x86"
+			custom="true"
+			embed="true" />
+		<framework
+			src="src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/EmptyDotNetComponentUWP_x64_Release/EmptyDotNetComponentUWP.winmd"
+			device-target="all"
+			target-dir="x64"
+			arch="x64"
+			custom="true"
+			embed="true" />
+		<framework
+			src="src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/EmptyDotNetComponentUWP_ARM_Release/EmptyDotNetComponentUWP.winmd"
+			device-target="all"
+			target-dir="ARM"
+			arch="ARM"
+			custom="true"
+			embed="true" />
     </platform>
 
 </plugin>

@@ -8,7 +8,7 @@ function newProgressEvent(result) {
     return event;
 }
 
-exports.unzip = function(fileName, outputDirectory, callback, progressCallback) {
+exports.unzip = function(fileName, outputDirectory, callback, progressCallback, algorithmName) {
     var win = function(result) {
         if (result && typeof result.loaded != "undefined") {
             if (progressCallback) {
@@ -23,7 +23,7 @@ exports.unzip = function(fileName, outputDirectory, callback, progressCallback) 
             callback(error);
         }
     };
-    cordova.exec(win, fail, "Zip", "unzip", [fileName, outputDirectory]);
+    cordova.exec(win, fail, "Zip", "unzip", [fileName, outputDirectory, algorithmName]);
 
     //exec(win, fail, 'Zip', 'unzip', [fileName, outputDirectory]);
 };

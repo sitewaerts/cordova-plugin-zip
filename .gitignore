@@ -3,3 +3,12 @@ node_modules/
 
 .idea
 *.iml
+
+*.vcxproj.user
+.vs/
+src/windows/ZipComponentUWP/Bin/
+src/windows/ZipComponentUWP/Build/
+src/windows/ZipComponentUWP/packages/
+src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/
+src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Build/
+src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/obj/

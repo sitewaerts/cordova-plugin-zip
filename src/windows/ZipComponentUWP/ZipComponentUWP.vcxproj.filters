@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>bb36ab57-29d1-43e3-acab-a8c05f3b336c</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Libraries">
+      <UniqueIdentifier>{c478a3d4-a9a1-419f-81e0-2d121f102132}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\andyzip">
+      <UniqueIdentifier>{54231db7-5b4a-41da-8797-8822c04ee81d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\miniz-cpp">
+      <UniqueIdentifier>{166ff172-1e8f-4cae-88cd-4a271213a76a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{6aebb3a7-3b99-4479-a0e5-5dcd0acf64c1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\pch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ZipAlgorithm.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ZipAlgorithm_andyzip.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ZipAlgorithm_miniz-cpp.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ZipComponent.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\algorithm.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\autocorr.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\brotli_data.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\brotli_decoder.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\deflate_decoder.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\deflate_encoder.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\huffman_table.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\andyzip\include\andyzip\zipfile_reader.hpp">
+      <Filter>Libraries\andyzip</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\miniz-cpp\zip_file.hpp">
+      <Filter>Libraries\miniz-cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\pch.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ZipAlgorithm.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ZipAlgorithm_andyzip.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ZipAlgorithm_miniz-cpp.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ZipComponent.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
