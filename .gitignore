@@ -6,9 +6,18 @@ node_modules/
 
 *.vcxproj.user
 .vs/
-src/windows/ZipComponentUWP/Bin/
+src/windows/ZipComponentUWP/Bin/*_Debug
+src/windows/ZipComponentUWP/Bin/*/*.exe
+src/windows/ZipComponentUWP/Bin/*/*.exp
+src/windows/ZipComponentUWP/Bin/*/*.iobj
+src/windows/ZipComponentUWP/Bin/*/*.ipdb
+src/windows/ZipComponentUWP/Bin/*/*.lib
+src/windows/ZipComponentUWP/Bin/*/*.pdb
+src/windows/ZipComponentUWP/Bin/*/*.pri
 src/windows/ZipComponentUWP/Build/
 src/windows/ZipComponentUWP/packages/
-src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/
+src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/*_Debug
+src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/*/*.pdb
+src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/*/*.pri
 src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Build/
 src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/obj/

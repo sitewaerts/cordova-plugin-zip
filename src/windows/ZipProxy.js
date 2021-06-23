@@ -135,6 +135,13 @@ function unzipJSZip(filename, outputDir, progressCallback)
         });
 }
 
+/**
+ * @param {string} filename
+ * @param {string} outputDir
+ * @param {string} zipAlgorithm ('miniz-cpp' or 'andyzip')
+ * @param {function(total:number, loaded:number):void} progressCallback
+ * @return {PromiseLike<any>}
+ */
 function unzipUWP(zipFileIn, outDirIn, zipAlgorithm, progressCallback)
 {
     console.log('ZipProxy.Zip.unzip.unzipUWP()');
@@ -209,13 +216,27 @@ cordova.commandProxy.add("Zip", {
             function progressCallback(total, loaded){
                 successCallback({loaded: loaded, total: total}, { keepCallback: true});
             }
+			
+			function isWindows10orHigher() {
+				if( device && device.platform && device.platform === 'windows' && device.version ) {
+					let windowsVersion = parseInt(device.version.substr(0, device.version.indexOf('.')));
+					return windowsVersion >= 10;
+				}
+				return false;
+			}
+			
+			// Use the fastest algorithm 'andyzip' as default, but fallback to 'jszip'
+			// if the current platform doesn't support the native UWP implementations
+			let algorithm = args[2] || 'andyzip';
+			if( algorithm !== 'jszip' && !isWindows10orHigher() )
+				algorithm = 'jszip';
 
-            if (args.length == 3 && args[2]) {
-                unzipUWP(args[0], args[1], args[2], progressCallback)
+            if( algorithm === 'jszip' ) {
+				unzipJSZip(args[0], args[1], progressCallback)
                     .then(successCallback, errorCallback || console.error.bind(console));
             }
-            else {
-                unzipJSZip(args[0], args[1], progressCallback)
+            else{
+                unzipUWP(args[0], args[1], algorithm, progressCallback)
                     .then(successCallback, errorCallback || console.error.bind(console));
             }
         }
