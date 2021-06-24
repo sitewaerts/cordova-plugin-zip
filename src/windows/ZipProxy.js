@@ -136,8 +136,8 @@ function unzipJSZip(filename, outputDir, progressCallback)
 }
 
 /**
- * @param {string} filename
- * @param {string} outputDir
+ * @param {string} zipFileIn
+ * @param {string} outDirIn
  * @param {string} zipAlgorithm ('miniz-cpp' or 'andyzip')
  * @param {function(total:number, loaded:number):void} progressCallback
  * @return {PromiseLike<any>}
