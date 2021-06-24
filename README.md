@@ -29,6 +29,9 @@ file size of the zip file.
 
 ## Release Notes
 
+### 3.1.3 (Jun 24, 2021)
+* native impl for windows
+
 ### 3.1.2 (Feb 23, 2021)
 * progress callback for windows
 * jszip update
