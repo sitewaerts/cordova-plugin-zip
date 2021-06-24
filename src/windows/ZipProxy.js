@@ -165,24 +165,23 @@ function unzipUWP(zipFileIn, outDirIn, zipAlgorithm, progressCallback)
                         var zipUWP = new ZipComponentUWP.ZipComponent(zipAlgorithm, zipFileNative.path, outDirNative.path);
 						var zipFileIndex = 0;
 						var zipFileCount = zipUWP.getEntryCount();
-						
+
 						progressCallback(zipFileCount, 0);
 
 						function _fileProcessed()
 						{
 							progressCallback(zipFileCount, ++zipFileIndex);
 						}
-						
+
 						var zipJobs = [];
 						for(let i = 0; i < zipFileCount; ++i)
-							zipJobs[i] = { index: i, name: zipUWP.getEntryName(i) };
-						
+							zipJobs[i] = i;
+
 						return WinJS.Promise.join(zipJobs.map(function(zipJob)
 							{
 								return new WinJS.Promise(function(resolve)
 									{
-										console.log('zipUWP.unzipEntry() => ' + zipJob.name);
-										zipUWP.unzipEntry(zipJob.index);
+										zipUWP.unzipEntry(zipJob);
 										resolve();
 									}).then(_fileProcessed);
 							}
