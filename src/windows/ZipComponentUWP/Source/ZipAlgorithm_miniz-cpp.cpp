@@ -30,7 +30,7 @@ bool ZipAlgorithm_miniz_cpp::Open(const char* pchZipFile, const char* pchOutputD
 		return false;
 	}
 
-	InitializeOutputDir(pchOutputDir);
+	SetOutputDirWithTrailingSlash(pchOutputDir);
 
 	m_vEntries = m_pZipFile->namelist();
 
