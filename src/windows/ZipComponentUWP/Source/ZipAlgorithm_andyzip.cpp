@@ -81,7 +81,7 @@ __pragma(pack(pop))
 
 // This is a replacement for the zipfile_reader class.
 // It fixes an issue in zipfile_reader with local file headers not containing
-// the uncompressed size  and reduces allocations by reserving memory upfront.
+// the uncompressed size and reduces allocations by reserving memory upfront.
 // Assumes little endianness and supports only deflate for decompression!
 class ZipAlgorithm_andyzip::Reader
 {

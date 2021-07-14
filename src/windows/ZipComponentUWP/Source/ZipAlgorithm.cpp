@@ -12,8 +12,11 @@ const char* ZipAlgorithm::NameMinizCpp	= "miniz-cpp";
 
 ZipAlgorithm* ZipAlgorithm::Create(const char* pchAlgorithmName)
 {
-	if( pchAlgorithmName == nullptr )
+	if( pchAlgorithmName == nullptr || ::strlen(pchAlgorithmName) == 0 )
+	{
+		throw std::runtime_error("ZipAlgorithm::Create(): invalid algorithm name");
 		return nullptr;
+	}
 
 	if( ::strcmp(pchAlgorithmName, NameAndyZip) == 0 )
 		return new ZipAlgorithm_andyzip();
@@ -34,14 +37,24 @@ void ZipAlgorithm::Destroy(ZipAlgorithm*& pAlgorithm)
 
 void ZipAlgorithm::SetOutputDirWithTrailingSlash(const char* pchOutputDir)
 {
+	// Only for empty paths we don't append trailing slashes
+	if( pchOutputDir == nullptr || pchOutputDir[0] == '\0' )
+		m_strOutputDir = "";
+
 	m_strOutputDir = pchOutputDir;
-	if( m_strOutputDir[m_strOutputDir.length() - 1] != '/' && m_strOutputDir[m_strOutputDir.length() - 1] != '\\' )
+
+	const char chLastChar = m_strOutputDir[m_strOutputDir.length() - 1];
+	if( chLastChar != '/' && chLastChar != '\\' )
 		m_strOutputDir += '/';
 }
 
 bool ZipAlgorithm::CreateEntryDir(const std::string& strEntryDir) const
 {
-	const char& chLastChar = strEntryDir[strEntryDir.length() - 1];
+	const size_t szEntryDirLength = strEntryDir.length();
+	if( szEntryDirLength < 1 )
+		throw std::runtime_error("ZipAlgorithm::CreateEntryDir(): invalid/empty entry dir");
+
+	const char& chLastChar = strEntryDir[szEntryDirLength - 1];
 	if( chLastChar != '/' && chLastChar != '\\' )
 		return false;
 

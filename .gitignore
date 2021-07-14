@@ -6,6 +6,7 @@ node_modules/
 
 *.vcxproj.user
 .vs/
+src/windows/ZipComponentUWP/*.aps
 src/windows/ZipComponentUWP/Bin/*_Debug
 src/windows/ZipComponentUWP/Bin/*/*.exe
 src/windows/ZipComponentUWP/Bin/*/*.exp

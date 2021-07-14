@@ -16,6 +16,7 @@ namespace ZipComponentUWP
 		bool			UnzipEntry(size_t szEntryIndex);
 
 		String^			GetLastError();
+		String^			GetVersion();
 
 	private:
 		ZipAlgorithm*	m_pAlgorithm;
