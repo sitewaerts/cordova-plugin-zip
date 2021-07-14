@@ -33,14 +33,19 @@ Possible options are:
 * 'miniz-cpp' (Native Windows 10 C/C++ UWP implementation similar to iOS implementation)
 * 'andyzip' (Native Windows 10 C/C++ UWP implementation slightly faster than miniz-cpp)
 
-If unzipAlgorithm is undefined, the plugin will default to 'andyzip'.
+If unzipAlgorithm is undefined, the plugin will default to 'miniz-cpp'.
+The 'miniz-cpp' implementation is more robust and tends to be faster for archives with many files.
 The 'andyzip' implementation offsers only basic zip format support with 'deflate' and 'uncompressed'
-as the only supported decoding formats for archive contents.
-The 'miniz-cpp' implementation is more robust and should be preferred for questinable archive sources.
+as the only supported decoding formats for archive contents, but tends to be faster for very large files.
 Both native implementations are more than 10 times faster than the jszip implementation.
 
 
 ## Release Notes
+
+### 3.2.1 (Jun 25, 2021)
+* Changed default zip algorithm to miniz-cpp (more reliable and faster for many small files)
+* Improved error catching and handling in ZipComponentUWP and ZipProxy.js
+* Added version number to ZipComponentUWP and pre-build script that updates it
 
 ### 3.2.0 (Jun 25, 2021)
 * Added native C/C++ implementations for windows based on miniz-cpp and andyzip
