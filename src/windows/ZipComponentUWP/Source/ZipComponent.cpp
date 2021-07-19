@@ -25,24 +25,32 @@ static inline std::string PlatformStringToStdString(String^ platformString)
 ZipComponent::ZipComponent(String^ strAlgorithmName, String^ strZipFile, String^ strOutputDir)
 : m_pAlgorithm(nullptr)
 {
-	const std::string stringAlgorithmNameUtf8 = PlatformStringToStdString(strAlgorithmName);
-	m_pAlgorithm = ZipAlgorithm::Create(stringAlgorithmNameUtf8.c_str());
-	if( m_pAlgorithm == nullptr )
+	try
 	{
-		m_strLastError = "Failed to create algorithm: " + StdStringToPlatformString(stringAlgorithmNameUtf8);
-		return;
+		const std::string stringAlgorithmNameUtf8 = PlatformStringToStdString(strAlgorithmName);
+		m_pAlgorithm = ZipAlgorithm::Create(stringAlgorithmNameUtf8.c_str());
+		if( m_pAlgorithm == nullptr )
+		{
+			m_strLastError = "Failed to create algorithm: " + StdStringToPlatformString(stringAlgorithmNameUtf8);
+			return;
+		}
+
+		m_strZipFileUtf8 = PlatformStringToStdString(strZipFile);
+		m_strOutputDirUtf8 = PlatformStringToStdString(strOutputDir);
+
+		if( !m_pAlgorithm->Open(m_strZipFileUtf8.c_str(), m_strOutputDirUtf8.c_str()) )
+		{
+			m_strLastError	= "Failed to open zip file " + StdStringToPlatformString(m_strZipFileUtf8)
+							+ " (output dir = " + StdStringToPlatformString(m_strOutputDirUtf8) + ")";
+
+			m_pAlgorithm->Close();
+			ZipAlgorithm::Destroy(m_pAlgorithm);
+		}
 	}
-
-	m_strZipFileUtf8 = PlatformStringToStdString(strZipFile);
-	m_strOutputDirUtf8 = PlatformStringToStdString(strOutputDir);
-
-	if( !m_pAlgorithm->Open(m_strZipFileUtf8.c_str(), m_strOutputDirUtf8.c_str()) )
+	catch( std::exception exception )
 	{
-		m_strLastError  = "Failed to open zip file " + StdStringToPlatformString(m_strZipFileUtf8)
-						+ " (output dir = " + StdStringToPlatformString(m_strOutputDirUtf8) + ")";
-
-		m_pAlgorithm->Close();
-		ZipAlgorithm::Destroy(m_pAlgorithm);
+		if( exception.what() )
+			m_strLastError += StdStringToPlatformString(std::string("\n\n") + exception.what());
 	}
 }
 
@@ -50,8 +58,15 @@ ZipComponent::~ZipComponent()
 {
 	if( m_pAlgorithm )
 	{
-		m_pAlgorithm->Close();
-		ZipAlgorithm::Destroy(m_pAlgorithm);
+		try
+		{
+			m_pAlgorithm->Close();
+			ZipAlgorithm::Destroy(m_pAlgorithm);
+		}
+		catch( std::exception exception )
+		{
+			// Can't do much here, since we're destructing the object
+		}
 	}
 }
 
@@ -63,7 +78,17 @@ size_t ZipComponent::GetEntryCount()
 		return 0u;
 	}
 
-	return m_pAlgorithm->GetEntryCount();
+	try
+	{
+		return m_pAlgorithm->GetEntryCount();
+	}
+	catch( std::exception exception )
+	{
+		if( exception.what() )
+			m_strLastError += StdStringToPlatformString(std::string("\n\n") + exception.what());
+	}
+
+	return 0u;
 }
 
 String^ ZipComponent::GetEntryName(const size_t szEntryIndex)
@@ -74,7 +99,17 @@ String^ ZipComponent::GetEntryName(const size_t szEntryIndex)
 		return "";
 	}
 
-	return StdStringToPlatformString(m_pAlgorithm->GetEntryName(szEntryIndex));
+	try
+	{
+		return StdStringToPlatformString(m_pAlgorithm->GetEntryName(szEntryIndex));
+	}
+	catch( std::exception exception )
+	{
+		if( exception.what() )
+			m_strLastError += StdStringToPlatformString(std::string("\n\n") + exception.what());
+	}
+
+	return "";
 }
 
 bool ZipComponent::UnzipEntry(const size_t szEntryIndex)
@@ -85,10 +120,29 @@ bool ZipComponent::UnzipEntry(const size_t szEntryIndex)
 		return false;
 	}
 
-	return m_pAlgorithm->UnzipEntry(szEntryIndex);
+	try
+	{
+		return m_pAlgorithm->UnzipEntry(szEntryIndex);
+	}
+	catch( std::exception exception )
+	{
+		if( exception.what() )
+			m_strLastError += StdStringToPlatformString(std::string("\n\n") + exception.what());
+	}
+
+	return false;
 }
 
 String^ ZipComponent::GetLastError()
 {
 	return m_strLastError;
 }
+
+// This method is defined in ZipComponent.Version.cpp
+// UWP components don't have access to the methods required to read entries out of the modules resource section.
+// The pre-build executed UpdateVersion.bat script reads it and updates ZipComponent.Version.cpp accordingly.
+//
+// String^ ZipComponent::GetVersion()
+// {
+//     return ...;
+// }

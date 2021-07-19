@@ -20,8 +20,9 @@ public:
 protected:
 	ZipAlgorithm() = default;
 
-	void						InitializeOutputDir(const char* pchOutputDir);
+	void						SetOutputDirWithTrailingSlash(const char* pchOutputDir);
 	bool						CreateEntryDir(const std::string& strEntryDir) const;
+	void						CreateEntrySubDirs(const std::string& strEntryName) const;
 
 	std::string					m_strOutputDir;
 };

@@ -162,31 +162,54 @@ function unzipUWP(zipFileIn, outDirIn, zipAlgorithm, progressCallback)
 
 					try
                     {
-                        var zipUWP = new ZipComponentUWP.ZipComponent(zipAlgorithm, zipFileNative.path, outDirNative.path);
-						var zipFileIndex = 0;
-						var zipFileCount = zipUWP.getEntryCount();
+                        let zipUWP = new ZipComponentUWP.ZipComponent(zipAlgorithm, zipFileNative.path, outDirNative.path);
+                        if( zipUWP == null ) {
+                            let initError = 'ERROR: Failed to initialize ZipComponentUWP!';
+                            console.log(initError);
+                            return WinJS.Promise.wrapError(initError);
+                        }
+
+                        console.log('- ZipComponentUWP Version = ' + zipUWP.getVersion());
+
+                        let initError = zipUWP.getLastError();
+                        if( initError !== '' ) {
+                            console.log(initError);
+                            return WinJS.Promise.wrapError(initError);
+                        }
+
+                        let zipFileCount = zipUWP.getEntryCount();
+                        if( zipFileCount === 0 ) {
+                            console.log('ERROR: No zip entries found! ' + zipUWP.getLastError());
+                            return WinJS.Promise.wrapError(zipUWP.getLastError());
+                        }
 						
 						progressCallback(zipFileCount, 0);
 
-						function _fileProcessed()
-						{
+                        let zipFileIndex = 0;
+						function _fileProcessed() {
 							progressCallback(zipFileCount, ++zipFileIndex);
 						}
-						
-						var zipJobs = [];
+
+						let zipJobs = [];
 						for(let i = 0; i < zipFileCount; ++i)
-							zipJobs[i] = { index: i, name: zipUWP.getEntryName(i) };
-						
+							zipJobs[i] = i;
+
 						return WinJS.Promise.join(zipJobs.map(function(zipJob)
 							{
-								return new WinJS.Promise(function(resolve)
-									{
-										console.log('zipUWP.unzipEntry() => ' + zipJob.name);
-										zipUWP.unzipEntry(zipJob.index);
-										resolve();
-									}).then(_fileProcessed);
+							return new WinJS.Promise(function (completeDispatch, errorDispatch)
+								{
+									if (zipUWP.unzipEntry(zipJob) === true) {
+										completeDispatch();
+									} else {
+										let errorName = 'ERROR: Failed to unzip entry [' + zipJob + '] = ' + zipUWP.getEntryName(zipJob);
+										let errorMessage = 'zipUWP.getLastError() = ' + zipUWP.getLastError();
+										console.log(errorName +' ' + errorMessage);
+										errorDispatch(new WinJS.ErrorFromName(errorName, errorMessage));
+									}
+								}).then(_fileProcessed);
 							}
-						)).then(function ()
+						))
+						.then(function()
 						{
 							progressCallback(zipJobs.length, zipJobs.length);
 						});
@@ -225,9 +248,9 @@ cordova.commandProxy.add("Zip", {
 				return false;
 			}
 			
-			// Use the fastest algorithm 'andyzip' as default, but fallback to 'jszip'
+			// Use the algorithm 'miniz-cpp' as default, but fallback to 'jszip'
 			// if the current platform doesn't support the native UWP implementations
-			let algorithm = args[2] || 'andyzip';
+			let algorithm = args[2] || 'miniz-cpp';
 			if( algorithm !== 'jszip' && !isWindows10orHigher() )
 				algorithm = 'jszip';
 
@@ -235,7 +258,7 @@ cordova.commandProxy.add("Zip", {
 				unzipJSZip(args[0], args[1], progressCallback)
                     .then(successCallback, errorCallback || console.error.bind(console));
             }
-            else{
+            else {
                 unzipUWP(args[0], args[1], algorithm, progressCallback)
                     .then(successCallback, errorCallback || console.error.bind(console));
             }

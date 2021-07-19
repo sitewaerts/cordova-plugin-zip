@@ -1,6 +1,6 @@
 # cordova-plugin-zip
 
-A Cordova plugin to unzip files in Android and iOS and Windows 10.
+A Cordova plugin to unzip files on Android, iOS and Windows 10.
 
 ## Installation
 
@@ -8,7 +8,7 @@ A Cordova plugin to unzip files in Android and iOS and Windows 10.
 
 ## Usage
 
-    zip.unzip(<source zip>, <destination dir>, <callback>, [<progressCallback>]);
+    zip.unzip(<source zip>, <destination dir>, <callback>, [<progressCallback>], [<unzipAlgorithm>]);
 
 Both source and destination arguments can be URLs obtained from the HTML File
 interface or absolute paths to files on the device.
@@ -27,10 +27,28 @@ has been extracted. E.g.:
 The values `loaded` and `total` are the number of compressed bytes processed and total. Total is the
 file size of the zip file.
 
+The unzipAlgorithm argument is optional and only evaluated under windows.
+Possible options are:
+* 'jszip' (JavaScript implementation jszip)
+* 'miniz-cpp' (Native Windows 10 C/C++ UWP implementation similar to iOS implementation)
+* 'andyzip' (Native Windows 10 C/C++ UWP implementation slightly faster than miniz-cpp)
+
+If unzipAlgorithm is undefined, the plugin will default to 'miniz-cpp'.
+The 'miniz-cpp' implementation is more robust and tends to be faster for archives with many files.
+The 'andyzip' implementation offsers only basic zip format support with 'deflate' and 'uncompressed'
+as the only supported decoding formats for archive contents, but tends to be faster for very large files.
+Both native implementations are more than 10 times faster than the jszip implementation.
+
+
 ## Release Notes
 
-### 3.1.3 (Jun 24, 2021)
-* native impl for windows
+### 3.2.1 (Jun 25, 2021)
+* Changed default zip algorithm to miniz-cpp (more reliable and faster for many small files)
+* Improved error catching and handling in ZipComponentUWP and ZipProxy.js
+* Added version number to ZipComponentUWP and pre-build script that updates it
+
+### 3.2.0 (Jun 25, 2021)
+* Added native C/C++ implementations for windows based on miniz-cpp and andyzip
 
 ### 3.1.2 (Feb 23, 2021)
 * progress callback for windows

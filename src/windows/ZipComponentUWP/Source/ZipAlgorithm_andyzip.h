@@ -1,8 +1,6 @@
 #pragma once
 
 
-class zipfile_reader;
-
 class ZipAlgorithm_andyzip : public ZipAlgorithm
 {
 public:
@@ -16,7 +14,8 @@ public:
 	bool				UnzipEntry(const size_t szEntryIndex) const;
 
 private:
-	std::vector<std::string>	m_vEntries;
-	std::vector<char>			m_vBuffer;
-	zipfile_reader*				m_pReader = nullptr;
+	class Reader;
+
+	std::vector<char>	m_vBuffer;
+	Reader*				m_pReader;
 };

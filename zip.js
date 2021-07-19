@@ -9,12 +9,12 @@ function newProgressEvent(result) {
 }
 
 // The optional parameter algorithmName enables to select the zip algorithm under Windows platforms.
-// If algorithmName is undefined then ZipProxy.js uses the fastest 'andyzip' implementation if the
+// If algorithmName is undefined then ZipProxy.js uses 'miniz-cpp' implementation if the
 // current platform supports it. Otherwise it falls back to 'jszip'.
 // Supported algorithms:
 // 'jszip'       Default JavaScript implementation
 // 'miniz-cpp'   Native Windows 10 C/C++ UWP implementation (similar to iOS implementation)
-// 'andyzip'     Native Windows 10 C/C++ UWP implementation (fastest implementation)
+// 'andyzip'     Native Windows 10 C/C++ UWP implementation (faster for large files)
 exports.unzip = function(fileName, outputDirectory, callback, progressCallback, algorithmName) {
     var win = function(result) {
         if (result && typeof result.loaded != "undefined") {
