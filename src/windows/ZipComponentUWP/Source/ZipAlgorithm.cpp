@@ -1,5 +1,6 @@
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include <direct.h>
 #include "ZipAlgorithm.h"
 #include "ZipAlgorithm_andyzip.h"
@@ -22,6 +23,10 @@ ZipAlgorithm* ZipAlgorithm::Create(const char* pchAlgorithmName)
 		return new ZipAlgorithm_andyzip();
 	else if( ::strcmp(pchAlgorithmName, NameMinizCpp) == 0 )
 		return new ZipAlgorithm_miniz_cpp();
+
+	std::ostringstream stringStream;
+	stringStream << "ZipAlgorithm::Create(): unsupported algorithm name: " << pchAlgorithmName;
+	throw std::runtime_error(stringStream.str());
 
 	return nullptr;
 }
@@ -48,30 +53,16 @@ void ZipAlgorithm::SetOutputDirWithTrailingSlash(const char* pchOutputDir)
 		m_strOutputDir += '/';
 }
 
-bool ZipAlgorithm::CreateEntryDir(const std::string& strEntryDir) const
-{
-	const size_t szEntryDirLength = strEntryDir.length();
-	if( szEntryDirLength < 1 )
-		throw std::runtime_error("ZipAlgorithm::CreateEntryDir(): invalid/empty entry dir");
-
-	const char& chLastChar = strEntryDir[szEntryDirLength - 1];
-	if( chLastChar != '/' && chLastChar != '\\' )
-		return false;
-
-	const std::string strDir(m_strOutputDir + strEntryDir);
-	_mkdir(strDir.c_str());
-	return true;
-}
-
-void ZipAlgorithm::CreateEntrySubDirs(const std::string& strEntryName) const
+void ZipAlgorithm::CreateEntrySubDirs(const std::string& strEntryName)
 {
 	// If strEntryName is a filename in a sub folder, we create all required folders first
 	// e.g. For strEntryName = "path/to/filename" we create the folders "path" and "path/to".
 	size_t szPos = strEntryName.find('/');
 	while( szPos != std::string::npos )
 	{
-		const std::string strFolder(m_strOutputDir + strEntryName.substr(0, szPos));
-		_mkdir(strFolder.c_str());
+		m_strCache = m_strOutputDir; // Reuse m_strCache to reduce string allocations
+		m_strCache.append(strEntryName, 0, szPos);
+		_mkdir(m_strCache.c_str());
 		szPos = strEntryName.find('/', szPos + 1);
 	}
 }

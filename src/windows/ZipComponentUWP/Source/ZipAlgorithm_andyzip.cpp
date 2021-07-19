@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <stdexcept>
 #include <direct.h>
@@ -125,6 +126,13 @@ public:
 
 	const std::string& GetEntryName(const size_t szEntryIndex) const
 	{
+		if( szEntryIndex >= m_vFiles.size() )
+		{
+			std::ostringstream stringStream;
+			stringStream << "ZipAlgorithm_andyzip::Reader::GetEntryName(): invalid index " << szEntryIndex;
+			throw std::runtime_error(stringStream.str());
+		}
+
 		return m_vFiles[szEntryIndex];
 	}
 
@@ -236,22 +244,37 @@ void ZipAlgorithm_andyzip::Close()
 
 size_t ZipAlgorithm_andyzip::GetEntryCount() const
 {
-	return m_pReader->GetEntryCount();
+	return m_pReader ? m_pReader->GetEntryCount() : 0u;
 }
 
 const std::string& ZipAlgorithm_andyzip::GetEntryName(const size_t szEntryIndex) const
 {
+	if( m_pReader == nullptr )
+		throw std::runtime_error("ZipAlgorithm_andyzip::GetEntryName(): reader not initialized");
+
 	return m_pReader->GetEntryName(szEntryIndex);
 }
 
-bool ZipAlgorithm_andyzip::UnzipEntry(const size_t szEntryIndex) const
+bool ZipAlgorithm_andyzip::UnzipEntry(const size_t szEntryIndex)
 {
+	if( m_pReader == nullptr )
+		throw std::runtime_error("ZipAlgorithm_andyzip::GetEntryName(): reader not initialized");
+
 	const std::string& strEntryName = GetEntryName(szEntryIndex);
 	CreateEntrySubDirs(strEntryName);
 
-	const std::vector<uint8_t>&	filedata(m_pReader->GetEntryData(strEntryName));
-	std::ofstream				ofFile(m_strOutputDir + strEntryName, std::ios::binary | std::ios::out);
+	// If entry is a directory, stop here, since CreateEntrySubDirs() already created it
+	const char chLastChar = strEntryName[strEntryName.length() - 1];
+	if( chLastChar == '\\' || chLastChar == '/' )
+		return true;
 
+	m_strCache = m_strOutputDir;
+	m_strCache += strEntryName;
+	std::ofstream ofFile(m_strCache, std::ios::binary | std::ios::out);
+	if( ofFile.rdstate() != 0 )
+		return false;
+
+	const std::vector<uint8_t>&	filedata(m_pReader->GetEntryData(strEntryName));
 	ofFile.write(reinterpret_cast<const char*>(filedata.data()), filedata.size());
 
 	return ofFile.rdstate() == 0;

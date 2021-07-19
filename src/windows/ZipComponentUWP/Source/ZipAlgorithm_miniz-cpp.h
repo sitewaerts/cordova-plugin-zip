@@ -13,7 +13,7 @@ public:
 
 	size_t				GetEntryCount() const;
 	const std::string&	GetEntryName(const size_t szEntryIndex) const;
-	bool				UnzipEntry(const size_t szEntryIndex) const;
+	bool				UnzipEntry(const size_t szEntryIndex);
 
 private:
 	std::vector<std::string>	m_vEntries;

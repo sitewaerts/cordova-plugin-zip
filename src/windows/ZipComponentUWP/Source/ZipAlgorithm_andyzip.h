@@ -11,11 +11,12 @@ public:
 
 	size_t				GetEntryCount() const;
 	const std::string&	GetEntryName(const size_t szEntryIndex) const;
-	bool				UnzipEntry(const size_t szEntryIndex) const;
+	bool				UnzipEntry(const size_t szEntryIndex);
 
 private:
 	class Reader;
 
 	std::vector<char>	m_vBuffer;
-	Reader*				m_pReader;
+	std::string			m_strFile;
+	Reader*				m_pReader = nullptr;
 };
