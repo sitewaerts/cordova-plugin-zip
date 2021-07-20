@@ -38,6 +38,7 @@ The 'miniz-cpp' implementation is more robust and handles various zip formats mo
 The 'andyzip' implementation offsers only basic zip format support with 'deflate' and 'uncompressed'
 as the only supported decoding formats for archive contents, but tends to be slightly faster.
 Both native implementations are more than 10 times faster than the jszip implementation.
+Note that 'jszip' is the only algorithm that doesn't extract empty folders.
 
 
 ## Release Notes
