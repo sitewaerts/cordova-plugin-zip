@@ -15,14 +15,14 @@ public:
 
 	virtual size_t				GetEntryCount() const = 0;
 	virtual const std::string&	GetEntryName(const size_t szEntryIndex) const = 0;
-	virtual bool				UnzipEntry(const size_t szEntryIndex) const = 0;
+	virtual bool				UnzipEntry(const size_t szEntryIndex) = 0;
 
 protected:
 	ZipAlgorithm() = default;
 
 	void						SetOutputDirWithTrailingSlash(const char* pchOutputDir);
-	bool						CreateEntryDir(const std::string& strEntryDir) const;
-	void						CreateEntrySubDirs(const std::string& strEntryName) const;
+	void						CreateEntrySubDirs(const std::string& strEntryName);
 
 	std::string					m_strOutputDir;
+	std::string					m_strCache;
 };

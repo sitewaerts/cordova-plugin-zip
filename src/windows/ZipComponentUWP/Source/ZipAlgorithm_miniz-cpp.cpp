@@ -56,20 +56,35 @@ size_t ZipAlgorithm_miniz_cpp::GetEntryCount() const
 
 const std::string& ZipAlgorithm_miniz_cpp::GetEntryName(const size_t szEntryIndex) const
 {
+	if( szEntryIndex >= m_vEntries.size() )
+	{
+		std::ostringstream stringStream;
+		stringStream << "ZipAlgorithm_miniz_cpp::GetEntryName(): invalid index " << szEntryIndex;
+		throw std::runtime_error(stringStream.str());
+	}
+
 	return m_vEntries[szEntryIndex];
 }
 
-bool ZipAlgorithm_miniz_cpp::UnzipEntry(const size_t szEntryIndex) const
+bool ZipAlgorithm_miniz_cpp::UnzipEntry(const size_t szEntryIndex)
 {
-	if( m_pZipFile )
-	{
-		const std::string strEntry = GetEntryName(szEntryIndex);
-		if( CreateEntryDir(strEntry) )
-			return true;
+	if( m_pZipFile == nullptr )
+		return false;
 
-		m_pZipFile->extract(strEntry, m_strOutputDir);
+	const std::string strEntryName = GetEntryName(szEntryIndex);
+	CreateEntrySubDirs(strEntryName);
+
+	// If entry is a directory, stop here, since CreateEntrySubDirs() already created it
+	const char chLastChar = strEntryName[strEntryName.length() - 1];
+	if( chLastChar == '\\' || chLastChar == '/' )
 		return true;
-	}
 
-	return false;
+	m_strCache = m_strOutputDir;
+	m_strCache += strEntryName;
+	std::ofstream ofFile(m_strCache, std::ios::binary | std::ios::out);
+	if( ofFile.rdstate() != 0 )
+		return false;
+
+	ofFile << m_pZipFile->open(strEntryName).rdbuf();
+	return ofFile.rdstate() == 0;
 }

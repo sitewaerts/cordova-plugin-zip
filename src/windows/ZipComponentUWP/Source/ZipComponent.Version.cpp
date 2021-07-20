@@ -16,5 +16,5 @@ using namespace ZipComponentUWP;
  
 String^ ZipComponent::GetVersion() 
 { 
-	return "1.0.1.0"; 
+	return "1.0.2.0"; 
 } 

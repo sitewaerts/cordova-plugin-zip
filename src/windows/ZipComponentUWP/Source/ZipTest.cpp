@@ -58,7 +58,7 @@ int main(int argc, const char* argv[])
 		ZipAlgorithm::Destroy(pAlgorithm);
 
 		std::cout << "Duration: " << std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeBegin).count() << " ms";
-		if (iResult != EXIT_SUCCESS)
+		if( iResult != EXIT_SUCCESS )
 			std::cout << "Error: " << iResult << std::endl;
 
 		return iResult;
