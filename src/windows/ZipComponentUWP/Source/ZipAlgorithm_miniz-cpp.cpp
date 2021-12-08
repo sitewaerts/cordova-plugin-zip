@@ -86,5 +86,8 @@ bool ZipAlgorithm_miniz_cpp::UnzipEntry(const size_t szEntryIndex)
 		return false;
 
 	ofFile << m_pZipFile->open(strEntryName).rdbuf();
-	return ofFile.rdstate() == 0;
+	if( ofFile.rdstate() != 0 && m_pZipFile->getinfo(strEntryName).file_size == 0 )
+		return true;
+
+	return false;
 }
