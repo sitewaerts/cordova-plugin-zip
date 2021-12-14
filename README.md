@@ -4,7 +4,7 @@ A Cordova plugin to unzip files on Android, iOS and Windows 10.
 
 ## Installation
 
-    cordova plugin add cordova-plugin-zip
+    cordova plugin add https://github.com/sitewaerts/cordova-plugin-zip
 
 ## Usage
 
