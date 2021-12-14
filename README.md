@@ -43,7 +43,9 @@ Note that 'jszip' is the only algorithm that doesn't extract empty folders.
 
 ## Release Notes
 
-### 3.2.2 (Jul 19, 2021)
+### 3.2.3 (Dec 8, 2021)
+- Fixed miniz-cpp returning error when unzipping empty files
+- Fixed andyzip crashing when unzipping invalid archives### 3.2.2 (Jul 19, 2021)
 * Fixed miniz-cpp not creating folders
 * Improved caching for string operations and generall error handling
 
