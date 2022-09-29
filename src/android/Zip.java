@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.FileNotFoundException;
+import java.lang.SecurityException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -120,12 +121,16 @@ public class Zip extends CordovaPlugin {
             {
                 anyEntries = true;
                 String compressedName = ze.getName();
+                File file = new File(outputDirectory + compressedName);
+
+                // Prevent zip path traversal vulnerability: https://support.google.com/faqs/answer/9294009
+                if (!file.getCanonicalPath().startsWith(outputDirectory)) {
+                    throw new SecurityException("Potential zip path traversal vulnerability detected");
+                }
 
                 if (ze.isDirectory()) {
-                   File dir = new File(outputDirectory + compressedName);
-                   dir.mkdirs();
+                   file.mkdirs();
                 } else {
-                    File file = new File(outputDirectory + compressedName);
                     file.getParentFile().mkdirs();
                     if(file.exists() || file.createNewFile()){
                         Log.w("Zip", "extracting: " + file.getPath());
