@@ -13,9 +13,9 @@ A Cordova plugin to unzip files on Android, iOS and Windows 10.
 Both source and destination arguments can be URLs obtained from the HTML File
 interface or absolute paths to files on the device.
 
-The callback argument will be executed when the unzip is complete, or when an
+The callback argument will be executed when unzip is complete, or when an
 error occurs. It will be called with a single argument, which will be 0 on
-success, or -1 on failure.
+success, or an error object on failure.
 
 The progressCallback argument is optional and will be executed whenever a new ZipEntry
 has been extracted. E.g.:
@@ -44,7 +44,7 @@ Both native implementations are more than 10 times faster than the jszip impleme
 
 ### 3.2.2 (Jul 19, 2021)
 * Fixed miniz-cpp not creating folders
-* Improved caching for string operations and generall error handling
+* Improved caching for string operations and general error handling
 
 ### 3.2.1 (Jul 15, 2021)
 * Changed default zip algorithm to miniz-cpp (more reliable and faster for many small files)

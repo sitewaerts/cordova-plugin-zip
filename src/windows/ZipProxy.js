@@ -1,4 +1,6 @@
-var JSZip = require("./JsZip");
+// noinspection ES6ConvertVarToLetConst
+
+var JSZip = require("./JsZip"); // provided by plugin.xml
 
 var Storage = Windows.Storage; // Alias for readability
 
@@ -79,6 +81,10 @@ function resolveOutDir(outputDir)
  */
 function unzipJSZip(filename, outputDir, progressCallback)
 {
+    console.log('ZipProxy.Zip.unzip.unzipJSZip()');
+    console.log('- filename = ' + filename);
+    console.log('- outputDir = ' + outputDir);
+
     var fileCollisionOption = Storage.CreationCollisionOption.replaceExisting;
 
     return Storage.StorageFile
