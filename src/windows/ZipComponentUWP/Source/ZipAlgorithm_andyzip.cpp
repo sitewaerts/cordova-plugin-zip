@@ -213,6 +213,9 @@ bool ZipAlgorithm_andyzip::Open(const char* pchZipFile, const char* pchOutputDir
 		return false;
 
 	const std::streamsize size = ifZipFile.tellg();
+	if( size < 22 ) // Minimum zip file size (see "https://en.wikipedia.org/wiki/ZIP_(file_format)")
+		return false;
+
 	ifZipFile.seekg(0, std::ios::beg);
 	m_vBuffer.resize(static_cast<size_t>(size));
 
@@ -275,7 +278,9 @@ bool ZipAlgorithm_andyzip::UnzipEntry(const size_t szEntryIndex)
 		return false;
 
 	const std::vector<uint8_t>&	filedata(m_pReader->GetEntryData(strEntryName));
-	ofFile.write(reinterpret_cast<const char*>(filedata.data()), filedata.size());
+	if( filedata.size() == 0 )
+		return true;
 
+	ofFile.write(reinterpret_cast<const char*>(filedata.data()), filedata.size());
 	return ofFile.rdstate() == 0;
 }

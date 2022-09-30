@@ -59,7 +59,7 @@ int main(int argc, const char* argv[])
 
 		std::cout << "Duration: " << std::chrono::duration_cast<std::chrono::milliseconds>(timeEnd - timeBegin).count() << " ms";
 		if( iResult != EXIT_SUCCESS )
-			std::cout << "Error: " << iResult << std::endl;
+			std::cout << ", Error: " << iResult << std::endl;
 
 		return iResult;
 	}

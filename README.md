@@ -4,7 +4,7 @@ A Cordova plugin to unzip files on Android, iOS and Windows 10.
 
 ## Installation
 
-    cordova plugin add cordova-plugin-zip
+    cordova plugin add https://github.com/sitewaerts/cordova-plugin-zip
 
 ## Usage
 
@@ -38,9 +38,20 @@ The 'miniz-cpp' implementation is more robust and handles various zip formats mo
 The 'andyzip' implementation offsers only basic zip format support with 'deflate' and 'uncompressed'
 as the only supported decoding formats for archive contents, but tends to be slightly faster.
 Both native implementations are more than 10 times faster than the jszip implementation.
+Note that 'jszip' is the only algorithm that doesn't extract empty folders.
 
 
 ## Release Notes
+
+### 3.2.5 (Sep 29, 2022)
+* Fixed zip path traversal vulnerability in Android implementation (Zip.java)
+
+### 3.2.4 (Dec 14, 2021)
+* Fixed miniz-cpp not extracting more than one file successfully
+
+### 3.2.3 (Dec 8, 2021)
+* Fixed miniz-cpp returning error when unzipping empty files
+* Fixed andyzip crashing when unzipping invalid archives
 
 ### 3.2.2 (Jul 19, 2021)
 * Fixed miniz-cpp not creating folders
