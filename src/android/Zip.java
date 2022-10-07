@@ -124,8 +124,8 @@ public class Zip extends CordovaPlugin {
                 File file = new File(outputDirectory + compressedName);
 
                 // Prevent zip path traversal vulnerability: https://support.google.com/faqs/answer/9294009
-                if (!file.getCanonicalPath().startsWith(outputDirectory)) {
-                    throw new SecurityException("Potential zip path traversal vulnerability detected");
+                if (!file.getCanonicalPath().startsWith(outputDir.getCanonicalPath())) {
+                    throw new SecurityException("Potential zip path traversal vulnerability detected: " + compressedName);
                 }
 
                 if (ze.isDirectory()) {
