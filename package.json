@@ -39,5 +39,8 @@
     "cordova-plugin-device": "^2.1.0",
     "cordova-plugin-file": "^7.0.0",
     "jszip": "^3.6.0"
+  },
+  "dependencies": {
+    "cordova-android": "^11.0.0"
   }
 }
