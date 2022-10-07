@@ -158,7 +158,7 @@ public class Zip extends CordovaPlugin {
             else
                 callbackContext.error("Bad zip file");
         } catch (Exception e) {
-            String errorMessage = "An error occurred while unzipping.";
+            String errorMessage = "An error occurred while unzipping: " + e.getMessage();
             callbackContext.error(errorMessage);
             Log.e(LOG_TAG, errorMessage, e);
         } finally {
