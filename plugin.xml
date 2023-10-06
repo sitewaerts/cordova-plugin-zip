@@ -2,9 +2,10 @@
 <plugin xmlns="http://phonegap.com/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-zip"
-        version="3.2.6">
+        version="3.2.7">
     <engines>
         <engine name="cordova" version=">=3.3.0"/>
+        <engine name="cordova-electron" version=">=3.0.0"/>
     </engines>
     <dependency id="cordova-plugin-file" version=">=2.0.0"/>
 
@@ -123,6 +124,22 @@
 			arch="ARM"
 			custom="true"
 			embed="true" />
+    </platform>
+
+    <platform name="browser">
+        <js-module src="src/browser/ZipProxy.js" name="ZipProxy">
+            <merges target=""/>
+        </js-module>
+        <js-module src="src/jszip.min.js" name="JsZip">
+            <merges target=""/>
+        </js-module>
+    </platform>
+
+    <platform name="electron">
+        <framework src="src/electron"/>
+        <js-module src="src/jszip.min.js" name="JsZip">
+            <merges target=""/>
+        </js-module>
     </platform>
 
 </plugin>

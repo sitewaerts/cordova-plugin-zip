@@ -1,0 +1,13 @@
+{
+    "name": "cordova-plugin-zip",
+    "version": "0.0.0",
+    "main": "ZipProxy.js",
+    "cordova": {
+        "serviceName": "Zip"
+    },
+    "dependencies": {
+        "decompress": "^4.2.1",
+        "electron": "^26.0.0",
+        "extract-zip": "^2.0.1"
+    }
+}

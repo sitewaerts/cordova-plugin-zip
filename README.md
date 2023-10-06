@@ -43,6 +43,9 @@ Note that 'jszip' is the only algorithm that doesn't extract empty folders.
 
 ## Release Notes
 
+### 3.2.7 (Oct 06, 2023)
+* Added electron support
+
 ### 3.2.6 (Oct 07, 2022)
 * Bugfix for Fixed zip path traversal vulnerability in Android implementation (Zip.java)
 
