@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-zip",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "description": "Unzips zip files",
   "cordova": {
     "id": "cordova-plugin-unzip", 
@@ -40,6 +40,7 @@
     "jszip": "^3.6.0"
   },
   "dependencies": {
-    "cordova-android": "^11.0.0"
+    "cordova-android": "^11.0.0",
+    "cordova-plugin-file": "^8.0.0"
   }
 }

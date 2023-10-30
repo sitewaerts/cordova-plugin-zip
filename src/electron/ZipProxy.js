@@ -1,10 +1,11 @@
 const logEnabled = false;
+const logPrefix = 'cordova-plugin-zip > src > electron > ZipProxy.js';
 
 function log(message) {
     if (logEnabled !== true) {
         return;
     }
-    console.log(`cordova-plugin-zip > src > electron > ZipProxy.js: ${message}`);
+    console.log(`${logPrefix}: ${message}`);
 }
 
 
@@ -53,28 +54,94 @@ async function unzipWithExtractZip(filename, outputDir, progressCallback) {
 }
 
 
-module.exports = {
+const zipPlugin = {
     /**
      * @param {[fileName: String, outputDirectory: String]} args
      *      fileName - the full path of the zip archive
      *      outputDirectory - the full path of the directory where to extract the zip contents
      * @returns {Promise<void>} resolves when everything has been extracted successfully
+    */
+    
+    /**
+     * @param {string} fileName
+     * @param {string} outputDirectory
+     * @param {string} algorithm
+     * @param {CallbackContext} callbackContext
+     *
      */
-    unzip: function([args])
+    unzip: function([fileName, outputDirectory, algorithm], callbackContext)
     {
-        const fileName = args[0];
-        const outputDirectory = args[1];
+        const filePluginUtil = callbackContext.getCordovaService('File').util;
+        const nativeFileName = filePluginUtil.urlToFilePath(fileName);
+        const nativeOutputDirectory = filePluginUtil.urlToFilePath(outputDirectory);
+
+        log(`unzip: fileName = ${fileName} -> ${nativeFileName}`);
+        log(`unzip: outputDirectory = ${outputDirectory} -> ${nativeOutputDirectory}`);
+        log(`unzip: algorithm = ${algorithm}`);
+
         const progressCallback = ({ total, loaded }) => {
-            // TODO: Dummy progress callback until we have a solution for the issue that the electron implementation
-            // doesn't offer a way to use them.
-            log(`unzip: progressCallback(total: ${total}, loaded: ${loaded})`);
+            if (callbackContext.progress) {
+                callbackContext.progress({ total, loaded });
+            }
         };
-
-        log(`unzip: args = ${JSON.stringify(args)}`);
-        log(`unzip: fileName = ${fileName}`);
-        log(`unzip: outputDirectory = ${outputDirectory}`);
-        
-        return unzipWithExtractZip(fileName, outputDirectory, progressCallback)
+        unzipWithExtractZip(nativeFileName, nativeOutputDirectory, progressCallback)
+            .then(() => {
+                log(`unzip: succeeded`);
+                callbackContext.success();
+            })
+            .catch((error) => {
+                callbackContext.error(error);
+            });        
     }
-};
+}
 
+/**
+ * cordova electron plugin api
+ * @param {string} action
+ * @param {Array<any>} args
+ * @param {CallbackContext} callbackContext
+ * @returns {boolean} indicating if action is available in plugin
+ */
+const plugin = function (action, args, callbackContext)
+{
+    if (!zipPlugin[action]) {
+        log(`plugin-zip: unknown action = ${action}`);
+        return false;
+    }
+
+    try {
+        zipPlugin[action](args, callbackContext);
+    } catch (e) {
+        console.error(action + ' failed', e);
+        callbackContext.error({message: action + ' failed', cause: e});
+    }
+    return true;
+}
+
+// backwards compatibility: attach api methods for direct access from old cordova-electron platform impl
+Object.keys(zipPlugin).forEach((apiMethod) =>
+{
+    plugin[apiMethod] = (args) =>
+    {
+        return Promise.resolve((resolve, reject) =>
+        {
+            zipPlugin[apiMethod](args, {
+                progress: (data) =>
+                {
+                    console.warn("cordova-plugin-zip: ignoring progress event as not supported in old plugin API", data);
+                },
+                success: (data) =>
+                {
+                    resolve(data)
+                },
+                error: (data) =>
+                {
+                    reject(data)
+                }
+            });
+        });
+    }
+});
+
+
+module.exports = plugin;
