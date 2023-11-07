@@ -1,5 +1,5 @@
 {
-    "name": "cordova-plugin-zip",
+    "name": "cordova-plugin-zip-electron",
     "version": "0.0.0",
     "main": "index.js",
     "cordova": {
