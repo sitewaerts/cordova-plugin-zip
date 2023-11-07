@@ -23,7 +23,7 @@ function newProgressEvent(result)
 
 /**
  * The optional parameter algorithmName enables to select the zip algorithm under Windows platforms.
- * If algorithmName is undefined then ZipProxy.js uses 'miniz-cpp' implementation if the
+ * If algorithmName is undefined then index.js uses 'miniz-cpp' implementation if the
  * current platform supports it. Otherwise, it falls back to 'jszip'.
  * Supported algorithms:
  * 'jszip'       Default JavaScript implementation

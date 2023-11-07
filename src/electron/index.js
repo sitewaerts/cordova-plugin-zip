@@ -1,5 +1,5 @@
 const logEnabled = false;
-const logPrefix = 'cordova-plugin-zip > src > electron > ZipProxy.js';
+const logPrefix = 'cordova-plugin-zip > src > electron > index.js';
 
 function log(message) {
     if (logEnabled !== true) {
@@ -12,7 +12,7 @@ function log(message) {
 /**
  * Implementation using package: decompress
  * > npm install decompress --save
- * NOTE: Doesn't support progress callbacks so we don't use this implementation but keep it as a reference for testing.
+ * NOTE: Doesn't support progress callbacks, so we don't use this implementation but keep it as a reference for testing.
  * 
  * @param {string} filename
  * @param {string} outputDir
@@ -55,18 +55,13 @@ async function unzipWithExtractZip(filename, outputDir, progressCallback) {
 
 
 const zipPlugin = {
+
     /**
-     * @param {[fileName: String, outputDirectory: String]} args
-     *      fileName - the full path of the zip archive
-     *      outputDirectory - the full path of the directory where to extract the zip contents
-     * @returns {Promise<void>} resolves when everything has been extracted successfully
-    */
-    
-    /**
-     * @param {string} fileName
-     * @param {string} outputDirectory
+     * @param {string} fileName the full path of the zip archive
+     * @param {string} outputDirectory the full path of the directory where to extract the zip contents
      * @param {string} algorithm
      * @param {CallbackContext} callbackContext
+     * @void
      *
      */
     unzip: function([fileName, outputDirectory, algorithm], callbackContext)
@@ -80,9 +75,7 @@ const zipPlugin = {
         log(`unzip: algorithm = ${algorithm}`);
 
         const progressCallback = ({ total, loaded }) => {
-            if (callbackContext.progress) {
                 callbackContext.progress({ total, loaded });
-            }
         };
         unzipWithExtractZip(nativeFileName, nativeOutputDirectory, progressCallback)
             .then(() => {

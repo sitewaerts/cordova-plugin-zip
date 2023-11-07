@@ -43,6 +43,10 @@ Note that 'jszip' is the only algorithm that doesn't extract empty folders.
 
 ## Release Notes
 
+### 3.2.10 (Nov 07, 2023)
+* Added type defs
+* optimized package structure
+
 ### 3.2.7 (Oct 06, 2023)
 * Added electron support
 

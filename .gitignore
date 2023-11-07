@@ -22,3 +22,7 @@ src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/*/*.pdb
 src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Bin/*/*.pri
 src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/Build/
 src/windows/ZipComponentUWP/Libraries/EmptyDotNetComponentUWP/obj/
+/package-lock.json
+
+src/electron/package-lock.json
+src/electron/node_modules/

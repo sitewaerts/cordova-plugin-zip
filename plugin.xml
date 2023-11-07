@@ -2,7 +2,7 @@
 <plugin xmlns="http://phonegap.com/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-zip"
-        version="3.2.9">
+        version="3.2.10">
     <engines>
         <engine name="cordova" version=">=3.3.0"/>
         <engine name="cordova-electron" version=">=3.0.0"/>
@@ -12,7 +12,7 @@
     <name>cordova-plugin-zip</name>
     <description>Unzips zip files</description>
 
-    <js-module src="zip.js" name="Zip">
+    <js-module src="www/zip.js" name="Zip">
         <clobbers target="zip"/>
     </js-module>
 
