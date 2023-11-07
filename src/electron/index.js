@@ -66,9 +66,8 @@ const zipPlugin = {
      */
     unzip: function([fileName, outputDirectory, algorithm], callbackContext)
     {
-        const filePluginUtil = callbackContext.getCordovaService('File').util;
-        const nativeFileName = filePluginUtil.urlToFilePath(fileName);
-        const nativeOutputDirectory = filePluginUtil.urlToFilePath(outputDirectory);
+        const nativeFileName = _file_plugin_util.urlToFilePath(fileName);
+        const nativeOutputDirectory = _file_plugin_util.urlToFilePath(outputDirectory);
 
         log(`unzip: fileName = ${fileName} -> ${nativeFileName}`);
         log(`unzip: outputDirectory = ${outputDirectory} -> ${nativeOutputDirectory}`);
@@ -111,30 +110,16 @@ const plugin = function (action, args, callbackContext)
     return true;
 }
 
-// backwards compatibility: attach api methods for direct access from old cordova-electron platform impl
-Object.keys(zipPlugin).forEach((apiMethod) =>
-{
-    plugin[apiMethod] = (args) =>
-    {
-        return Promise.resolve((resolve, reject) =>
-        {
-            zipPlugin[apiMethod](args, {
-                progress: (data) =>
-                {
-                    console.warn("cordova-plugin-zip: ignoring progress event as not supported in old plugin API", data);
-                },
-                success: (data) =>
-                {
-                    resolve(data)
-                },
-                error: (data) =>
-                {
-                    reject(data)
-                }
-            });
-        });
-    }
-});
+let _file_plugin_util;
+
+/**
+ * @param {Record<string, string>} variables
+ * @param {(serviceName:string)=>Promise<any>} serviceLoader
+ * @returns {Promise<void>}
+ */
+plugin.init = async (variables, serviceLoader)=>{
+    _file_plugin_util = _file_plugin_util || (await serviceLoader('File')).util
+}
 
 
 module.exports = plugin;
