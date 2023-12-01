@@ -60,7 +60,7 @@ const zipPlugin = {
      * @param {string} fileName the full path of the zip archive
      * @param {string} outputDirectory the full path of the directory where to extract the zip contents
      * @param {string} algorithm
-     * @param {CallbackContext} callbackContext
+     * @param {CordovaElectronCallbackContext} callbackContext
      * @void
      *
      */
@@ -88,11 +88,7 @@ const zipPlugin = {
 }
 
 /**
- * cordova electron plugin api
- * @param {string} action
- * @param {Array<any>} args
- * @param {CallbackContext} callbackContext
- * @returns {boolean} indicating if action is available in plugin
+ * @type {CordovaElectronPlugin}
  */
 const plugin = function (action, args, callbackContext)
 {
@@ -112,13 +108,8 @@ const plugin = function (action, args, callbackContext)
 
 let _file_plugin_util;
 
-/**
- * @param {Record<string, string>} variables
- * @param {(serviceName:string)=>Promise<any>} serviceLoader
- * @returns {Promise<void>}
- */
-plugin.init = async (variables, serviceLoader)=>{
-    _file_plugin_util = _file_plugin_util || (await serviceLoader('File')).util
+plugin.initialize = async (ctx)=>{
+    _file_plugin_util = _file_plugin_util || (await ctx.getService('File')).util
 }
 
 
