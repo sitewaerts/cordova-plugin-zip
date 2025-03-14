@@ -40,11 +40,11 @@
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
             } else {
                 NSLog(@"%@ - %@", @"Error occurred during unzipping", [error localizedDescription]);
-                pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error occurred during unzipping"];
+               pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"%@ - %@", @"Error occurred during unzipping",[error localizedDescription]]];
             }
         } @catch(NSException* exception) {
-            NSLog(@"%@ - %@", @"Error occurred during unzipping", [exception debugDescription]);
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error occurred during unzipping"];
+            NSLog(@"%@ - %@", @"Exception occurred during unzipping", [exception debugDescription]);
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"%@ - %@", @"Exception occurred during unzipping",[exception debugDescription]]];
         }
         
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

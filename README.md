@@ -35,13 +35,16 @@ Possible options are:
 
 If unzipAlgorithm is undefined, the plugin will default to 'miniz-cpp'.
 The 'miniz-cpp' implementation is more robust and handles various zip formats more reliable.
-The 'andyzip' implementation offsers only basic zip format support with 'deflate' and 'uncompressed'
+The 'andyzip' implementation offers only basic zip format support with 'deflate' and 'uncompressed'
 as the only supported decoding formats for archive contents, but tends to be slightly faster.
 Both native implementations are more than 10 times faster than the jszip implementation.
 Note that 'jszip' is the only algorithm that doesn't extract empty folders.
 
 
 ## Release Notes
+
+### 3.2.11 (Mar 14, 2025)
+* use window.resolveLocalFileSystemURI to get native uri for zip file
 
 ### 3.2.10 (Nov 07, 2023)
 * Added type defs
