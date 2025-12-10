@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-zip",
-  "version": "3.2.11",
+  "version": "3.2.13",
   "description": "Unzips zip files",
   "types": "types/index.d.ts",
   "cordova": {

@@ -8,9 +8,14 @@
 
 type ZipAlgorithm =  'jszip' |  'miniz-cpp' |  'andyzip'
 
+type FileEntry = {
+    nativeURL: string
+    toURL(): string
+}
+
 interface ZipPlugin {
 
-    unzip(sourceZip:string, destinationDir:string, callback:(error:0|any)=>void, progressCallback?:(progress:{loaded:number,total:number})=>void, unzipAlgorithm?:ZipAlgorithm)
+    unzip(sourceZip:string|FileEntry, destinationDir:string|FileEntry, callback:(error:0|any)=>void, progressCallback?:(progress:{loaded:number,total:number})=>void, unzipAlgorithm?:ZipAlgorithm)
 
 }
 

@@ -11,7 +11,7 @@ A Cordova plugin to unzip files on Android, iOS and Windows 10.
     zip.unzip(<source zip>, <destination dir>, <callback>, [<progressCallback>], [<unzipAlgorithm>]);
 
 Both source and destination arguments can be URLs obtained from the HTML File
-interface or absolute paths to files on the device.
+interface, absolute paths to files on the device or FileEntry instances.
 
 The callback argument will be executed when unzip is complete, or when an
 error occurs. It will be called with a single argument, which will be 0 on
@@ -42,6 +42,13 @@ Note that 'jszip' is the only algorithm that doesn't extract empty folders.
 
 
 ## Release Notes
+
+### 3.2.13 Dec 10, 2025)
+* typings
+* dependencies
+
+### 3.2.12 (Nov 27, 2025)
+* optionally accept FileEntry arguments
 
 ### 3.2.11 (Mar 14, 2025)
 * use window.resolveLocalFileSystemURI to get native uri for zip file

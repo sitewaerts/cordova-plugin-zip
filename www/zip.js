@@ -30,8 +30,8 @@ function newProgressEvent(result)
  * 'miniz-cpp'   Native Windows 10 C/C++ UWP implementation (similar to iOS implementation)
  * 'andyzip'     Native Windows 10 C/C++ UWP implementation (faster for large files)
  *
- * @param {string} fileName
- * @param {string} outputDirectory
+ * @param {string|FileEntry} fileName
+ * @param {string|FileEntry} outputDirectory
  * @param {(error?:any|number)=>void} callback
  * @param {(e:ProgressEvent)=>void} [progressCallback]
  * @param {string} [algorithmName]
@@ -59,7 +59,19 @@ exports.unzip = function (fileName, outputDirectory, callback, progressCallback,
             callback(error);
         }
     };
-    cordova.exec(win, fail, "Zip", "unzip", [fileName, outputDirectory, algorithmName]);
+    // TODO
+    //   .nativeURL: null on electron
+    //   .toURL(): iOS version of zip plugin cannot handle <scheme>:// urls (scheme from cordova config.xml)
+    //   .toInternalURL():  old Windows version of zip plugin cannot handle cdv-file urls. fixed in version 3.2.11 of zip plugin, but this is not yet available in all deployed apps
+    //   currently passing nativeURL for backwards compat. could possibly switch to .toInternalURL() when all Windows apps have been updated
+    function toURL(file){
+        if(!file)
+            throw new Error("missing argument");
+        if(typeof file === 'string')
+            return file;
+        return file.nativeURL || file.toURL();
+    }
+    cordova.exec(win, fail, "Zip", "unzip", [toURL(fileName), toURL(outputDirectory), algorithmName]);
 
     //exec(win, fail, 'Zip', 'unzip', [fileName, outputDirectory]);
 };
